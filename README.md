@@ -5,6 +5,6 @@ Composition de l'équipe
 --------------
  * Amine BOUNEGGAR
  * Axel CHALON
- * Vesnard LE
+ * Veasnard LE
  * Kris PHIVILAY
  * Pauline TAVENAU
