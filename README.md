@@ -1,4 +1,4 @@
-Équipe 3 : Bataille navale
+Équipe 2 : Bataille navale
 ========================
 
 Composition de l'équipe
