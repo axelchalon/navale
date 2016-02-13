@@ -67,3 +67,10 @@ swiftmailer:
     username:  "%mailer_user%"
     password:  "%mailer_password%"
     spool:     { type: memory }
+
+fos_rest:
+    allowed_methods_listener: true
+    param_fetcher_listener: true
+
+# Enable the configuration of NelmioApiDoc
+nelmio_api_doc: ~
