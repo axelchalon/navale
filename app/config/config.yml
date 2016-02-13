@@ -71,6 +71,13 @@ swiftmailer:
 fos_rest:
     allowed_methods_listener: true
     param_fetcher_listener: true
+    view:
+        view_response_listener: true
+    format_listener:
+        enabled: true
+        rules:
+            - { path: '^/api/v1/', priorities: ['json', 'xml'], fallback_format: json, prefer_extension: true }
+            - { path: '^/', stop: true }
 
 # Enable the configuration of NelmioApiDoc
 nelmio_api_doc:

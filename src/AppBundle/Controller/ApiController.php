@@ -5,6 +5,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\Post;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
@@ -12,10 +13,12 @@ use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Request\ParamFetcher;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
+use AppBundle\Entity\Game;
+
 /**
  * @Route("/api/v1")
  */
-class ApiController extends Controller
+class ApiController extends FOSRestController
 {
     /**
      * @Route("/", name="api_homepage")
@@ -52,14 +55,22 @@ class ApiController extends Controller
      *          201: "Partie créée. Renvoie son ID et le secret du joueur."
      *      }
      * )
-     * @RequestParam(name="password", requirements=".+", nullable=true)
+     * @RequestParam(name="password", nullable=true, description="Mot de passe de la partie")
+     * @RequestParam(name="name", requirements=".+", allowBlank=false, strict=true, description="Nom de la partie")
      * @Post("/games", name="create_game")
      */
     public function createGameAction(ParamFetcher $paramFetcher)
     {
+        $game = new Game;
+        $game->setName($paramFetcher->get('name'));
+        $game->generateP1Secret();
+        $game->setPassword($paramFetcher->get('password'));
 
-        // BDD : insert & générer secret
-        return new Response($paramFetcher->get('password'));
+        $em = $this->getDoctrine()->getEntityManager();
+        $em->persist($game);
+        $em->flush();
+
+        return $this->view(array('game_id'=>$game->getId(), 'secret' => $game->getP1Secret()));
     }
 
     /**
