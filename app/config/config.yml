@@ -73,4 +73,5 @@ fos_rest:
     param_fetcher_listener: true
 
 # Enable the configuration of NelmioApiDoc
-nelmio_api_doc: ~
+nelmio_api_doc:
+  name: Navale API
