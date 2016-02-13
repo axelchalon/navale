@@ -4,10 +4,20 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+use JMS\Serializer\Annotation\VirtualProperty;
+use JMS\Serializer\Annotation\SerializedName;
+
+
+use JMS\Serializer\Annotation\Expose;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+
+
 /**
  * Game
  * @ORM\Table(name="game")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\GameRepository")
+ *
+ * @ExclusionPolicy("all")
  */
 class Game
 {
@@ -16,12 +26,14 @@ class Game
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @Expose
      */
     private $id;
 
     /**
      * @var string
      * @ORM\Column(name="name", type="string", length=255)
+     * @Expose
      */
     private $name;
 
@@ -120,6 +132,14 @@ class Game
     public function getPassword()
     {
         return $this->password;
+    }
+
+    /**
+     * @VirtualProperty()
+     */
+    public function hasPassword()
+    {
+        return $this->getPassword() !== null;
     }
 
 

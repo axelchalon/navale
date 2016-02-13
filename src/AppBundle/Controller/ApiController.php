@@ -43,7 +43,8 @@ class ApiController extends FOSRestController
      */
     public function listGamesAction()
     {
-        return new Response();
+        $games = $this->getDoctrine()->getEntityManager()->getRepository('AppBundle:Game')->findAll();
+        return $this->view($games);
     }
 
     /**
