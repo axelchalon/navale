@@ -158,7 +158,7 @@ class Game
      */
     public function generateP1Secret()
     {
-        // @TODO Throw exception if $this->p1secret is not null
+        // @TODO Throw exception if $this->p1Secret is not null
         $this->p1Secret = $this->generateSecret();
         return $this;
     }
@@ -213,13 +213,13 @@ class Game
     }
 
     /**
-     * Generate p2secret
+     * Generate p2Secret
      * @return Game
      */
     public function generateP2Secret()
     {
-        // @TODO Throw exception if $this->p2secret is not null
-        $this->p2secret = $this->generateSecret();
+        // @TODO Throw exception if $this->p2Secret is not null
+        $this->p2Secret = $this->generateSecret();
         return $this;
     }
 
@@ -230,6 +230,15 @@ class Game
     public function getP2Secret()
     {
         return $this->p2Secret;
+    }
+
+    /**
+     * Whether two players are already in the game or not
+     * @return true
+     */
+    public function isFull()
+    {
+        return $this->p2Secret !== null;
     }
 
     /**

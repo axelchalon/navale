@@ -5,6 +5,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\Post;
@@ -79,14 +80,29 @@ class ApiController extends FOSRestController
      *      description="Rejoint une partie.",
      *      section="1 - Parties",
      *      statusCodes={
-     *          200: "Partie rejointe. Renvoie le secret du joueur."
+     *          200: "Partie rejointe. Renvoie le secret du joueur.",
+     *          403: "Mauvais mot de passe pour rejoindre la partie, ou bien la partie est déjà remplie."
      *      }
      * )
+     * @RequestParam(name="password", nullable=true, description="Mot de passe de la partie")
      * @Post("/games/{game_id}/players", name="join_game")
+     * @ParamConverter("game", class="AppBundle:Game", options={"id" = "game_id"})
      */
-    public function joinGameAction()
+    public function joinGameAction(Game $game, ParamFetcher $paramFetcher)
     {
-        return new Response();
+        if ($game->getPassword() !== $paramFetcher->get('password'))
+            return $this->view(array('error' => 'Bad password.'),403);
+
+        if ($game->isFull())
+            return $this->view(array('error' => 'Game is already full.'),403);
+
+        $game->generateP2Secret();
+
+        $em = $this->getDoctrine()->getEntityManager();
+        $em->persist($game);
+        $em->flush();
+
+        return $this->view(array('secret' => $game->getP2Secret()));
     }
 
     /**
