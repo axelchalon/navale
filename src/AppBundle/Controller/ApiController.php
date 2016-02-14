@@ -40,13 +40,18 @@ class ApiController extends FOSRestController
      *      description="Liste les parties en attente de joueur",
      *      section="1 - Parties"
      * )
-     * @QueryParam(name="filter", nullable=true, description="Filtre, 'public' par exemple")
+     * @QueryParam(name="type", requirements="public", nullable=true, description="Filtrer les parties par type.")
+     * @QueryParam(name="name", requirements=".+", nullable=true, description="Filtrer les parties par nom.")
      * @Get("/games", name="list_games")
      */
     public function listGamesAction(ParamFetcher $paramFetcher)
     {
-        if ($paramFetcher->get('filter') === 'public')
+        if ($paramFetcher->get('type') === 'public' && $paramFetcher->get('name') === null)
             $games = $this->getDoctrine()->getEntityManager()->getRepository('AppBundle:Game')->findOpenPublicGames();
+        else if ($paramFetcher->get('type') === 'public' && $paramFetcher->get('name') !== null)
+            $games = $this->getDoctrine()->getEntityManager()->getRepository('AppBundle:Game')->findOpenPublicGamesByNameFuzzy($paramFetcher->get('name'));
+        else if ($paramFetcher->get('name') !== null)
+            $games = $this->getDoctrine()->getEntityManager()->getRepository('AppBundle:Game')->findGamesByNameFuzzy($paramFetcher->get('name'));
         else
             $games = $this->getDoctrine()->getEntityManager()->getRepository('AppBundle:Game')->findOpenGames();
 
@@ -149,7 +154,8 @@ class ApiController extends FOSRestController
      *      authentication=true,
      *      statusCodes={
      *          200: "Les navires ont été placés. Il faut maintenant attendre que l'autre joueur ait fait de même.",
-     *          400: "Les navires ne peuvent pas être placés tel que demandé. Les navires se croisent ou sortent du tableau."
+     *          400: "Les navires ne peuvent pas être placés tel que demandé. Les navires se croisent ou sortent du tableau.",
+     *          403: "Mauvais secret."
      *      }
      * )
      * @Post("/games/{game_id}/ships", name="place_ships")
