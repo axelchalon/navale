@@ -40,11 +40,16 @@ class ApiController extends FOSRestController
      *      description="Liste les parties en attente de joueur",
      *      section="1 - Parties"
      * )
+     * @QueryParam(name="filter", nullable=true, description="Filtre, 'public' par exemple")
      * @Get("/games", name="list_games")
      */
-    public function listGamesAction()
+    public function listGamesAction(ParamFetcher $paramFetcher)
     {
-        $games = $this->getDoctrine()->getEntityManager()->getRepository('AppBundle:Game')->findAll();
+        if ($paramFetcher->get('filter') === 'public')
+            $games = $this->getDoctrine()->getEntityManager()->getRepository('AppBundle:Game')->findOpenPublicGames();
+        else
+            $games = $this->getDoctrine()->getEntityManager()->getRepository('AppBundle:Game')->findOpenGames();
+
         return $this->view($games);
     }
 
