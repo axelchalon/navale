@@ -131,11 +131,15 @@ class ApiController extends FOSRestController
      *          404: "Pas encore d'adversaire.",
      *      }
      * )
+     * @ParamConverter("game", class="AppBundle:Game", options={"id" = "game_id"})
      * @Get("/games/{game_id}/players/2", name="player2_joined")
      */
-    public function player2JoinedAction()
+    public function player2JoinedAction(Game $game)
     {
-        return new Response();
+        if ($game->isFull())
+            return $this->view(array('error' => 'No one has joined yet.'),404);
+
+        return $this->view(array('error' => 'Somebody joined!'),200);
     }
 
     /**
