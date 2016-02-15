@@ -23,7 +23,8 @@
         "incenteev/composer-parameter-handler": "^2.0",
         "friendsofsymfony/rest-bundle": "^1.7",
         "nelmio/api-doc-bundle": "^2.11",
-        "jms/serializer-bundle": "^1.1"
+        "jms/serializer-bundle": "^1.1",
+        "phpunit/phpunit": "^4.8"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",
