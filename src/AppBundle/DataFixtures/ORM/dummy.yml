@@ -1,0 +1,5 @@
+AppBundle\Entity\Game:
+    game_{1..10}:
+        name: <sentence(3)>
+        p1Secret: <regexify('[0-9a-f]{20}')>
+        password: 50%? <password()>
