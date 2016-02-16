@@ -46,14 +46,17 @@ class ApiController extends FOSRestController
      */
     public function listGamesAction(ParamFetcher $paramFetcher)
     {
+        $em = $this->getDoctrine()->getManager();
+        
+        $this->getDoctrine()->getManager();
         if ($paramFetcher->get('type') === 'public' && $paramFetcher->get('name') === null)
-            $games = $this->getDoctrine()->getEntityManager()->getRepository('AppBundle:Game')->findOpenPublicGames();
+            $games = $em->getRepository('AppBundle:Game')->findOpenPublicGames();
         else if ($paramFetcher->get('type') === 'public' && $paramFetcher->get('name') !== null)
-            $games = $this->getDoctrine()->getEntityManager()->getRepository('AppBundle:Game')->findOpenPublicGamesByNameFuzzy($paramFetcher->get('name'));
+            $games = $em->getRepository('AppBundle:Game')->findOpenPublicGamesByNameFuzzy($paramFetcher->get('name'));
         else if ($paramFetcher->get('name') !== null)
-            $games = $this->getDoctrine()->getEntityManager()->getRepository('AppBundle:Game')->findGamesByNameFuzzy($paramFetcher->get('name'));
+            $games = $em->getRepository('AppBundle:Game')->findGamesByNameFuzzy($paramFetcher->get('name'));
         else
-            $games = $this->getDoctrine()->getEntityManager()->getRepository('AppBundle:Game')->findOpenGames();
+            $games = $em->getRepository('AppBundle:Game')->findOpenGames();
 
         return $this->view($games);
     }
