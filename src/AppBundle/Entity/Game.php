@@ -223,15 +223,15 @@ class Game
             if(($key = array_search((int)$ship['size'], $shipsPresets)) === false)
                 return 2; // @TODO throw exception
 
-            if(sizeof(array_keys($ship)) !== 4) // x, y, size, orientation
+            if(sizeof(array_keys($ship)) !== 4) // x, y, size, direction
                 return 3; // @TODO throw exception
 
             unset($shipsPresets[$key]);
 
-            if (!isset($ship['orientation']) || (!in_array($ship['orientation'],array('horizontal', 'vertical'))))
+            if (!isset($ship['direction']) || (!in_array($ship['direction'],array('horizontal', 'vertical'))))
                 return 4; // @TODO throw exception
 
-            if ($ship['orientation'] == 'horizontal')
+            if ($ship['direction'] == 'horizontal')
             {
                 $xp = 1;
                 $yp = 0;

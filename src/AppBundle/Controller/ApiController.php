@@ -164,7 +164,7 @@ class ApiController extends FOSRestController
      * )
      * @ParamConverter("game", class="AppBundle:Game", options={"id" = "game_id"})
      * @RequestParam(name="secret", nullable=false, description="Secret du joueur")
-     * @RequestParam(name="ships", array=true, nullable=false, description="Tableau de {x, y, size, orientation <horizontal|vertical>}")
+     * @RequestParam(name="ships", array=true, nullable=false, description="Tableau de {x, y, size, direction <horizontal|vertical>}")
      * @Post("/games/{game_id}/ships", name="place_ships")
      */
     public function placeShipsAction(Game $game, ParamFetcher $paramFetcher)
@@ -188,8 +188,6 @@ class ApiController extends FOSRestController
     }
 
     /**
-     * {ships: [{size: 4, x: 3, y:5, direction: 'horizontal' / 'vertical'}, {...}]}}
-     *
      * return 404 {ready: false} ou 200 {ready: true}
      * @ApiDoc(
      *      description="Indique si l'adversaire a placé ses navires.",
@@ -203,9 +201,12 @@ class ApiController extends FOSRestController
      * @ParamConverter("game", class="AppBundle:Game", options={"id" = "game_id"})
      * @Get("/games/{game_id}/players/{player_id}/ships", name="playerX_placed_ships")
      */
-    public function shipsPlacedAction()
+    public function shipsPlacedAction(Game $game, $player_id)
     {
-        return new Response();
+        if (!$game->playerHasPlacedShips($player_id))
+            return $this->view(array('error' => 'The player\'s ships haven\'t been placed yet.'),404);
+
+        return $this->view(array('info' => 'The player\'s ships have been placed.'),200);
     }
 
     /**
