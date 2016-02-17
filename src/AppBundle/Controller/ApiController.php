@@ -136,10 +136,10 @@ class ApiController extends FOSRestController
      */
     public function player2JoinedAction(Game $game)
     {
-        if ($game->isFull())
+        if (!$game->isFull())
             return $this->view(array('error' => 'No one has joined yet.'),404);
 
-        return $this->view(array('error' => 'Somebody joined!'),200);
+        return $this->view(array('info' => 'Somebody joined!'),200);
     }
 
     /**
@@ -162,11 +162,29 @@ class ApiController extends FOSRestController
      *          403: "Mauvais secret."
      *      }
      * )
+     * @ParamConverter("game", class="AppBundle:Game", options={"id" = "game_id"})
+     * @RequestParam(name="secret", nullable=false, description="Secret du joueur")
+     * @RequestParam(name="ships", array=true, nullable=false, description="Tableau de {x, y, size, orientation <horizontal|vertical>}")
      * @Post("/games/{game_id}/ships", name="place_ships")
      */
-    public function placeShipsAction()
+    public function placeShipsAction(Game $game, ParamFetcher $paramFetcher)
     {
-        return new Response();
+        $player = $game->getPlayerBySecret($paramFetcher->get('secret'));
+        // @TODO Exception in Game entity if bad secret?
+        if ($player === null)
+            return $this->view(array('error' => 'Bad secret.'),403);
+
+        if (!$game->isFull())
+            return $this->view(array('error' => 'No one has joined yet.'),403);
+
+        if ($game->playerHasPlacedShips($player))
+            return $this->view(array('error' => 'You\'ve already placed your ships.'),403);
+
+        $em = $this->getDoctrine()->getEntityManager();
+        $em->persist($game);
+        $em->flush();
+
+        return $this->view(array('info' => 'Ships placed!'),200);
     }
 
     /**
@@ -182,6 +200,7 @@ class ApiController extends FOSRestController
      *          404: "L'adversaire n'a pas encore placé ses navires."
      *      }
      * )
+     * @ParamConverter("game", class="AppBundle:Game", options={"id" = "game_id"})
      * @Get("/games/{game_id}/players/{player_id}/ships", name="playerX_placed_ships")
      */
     public function shipsPlacedAction()
@@ -208,6 +227,7 @@ class ApiController extends FOSRestController
      *          400: "Le coup n'est pas valide, ou bien ce n'est pas à votre tour de jouer."
      *      }
      * )
+     * @ParamConverter("game", class="AppBundle:Game", options={"id" = "game_id"})
      * @Post("/games/{game_id}/moves", name="shoot")
      */
     public function shootAction()
@@ -228,6 +248,7 @@ class ApiController extends FOSRestController
      *          404: "L'adversaire n'a pas encore joué ce coup."
      *      }
      * )
+     * @ParamConverter("game", class="AppBundle:Game", options={"id" = "game_id"})
      * @Get("/games/{game_id}/moves/{move_id}", name="retrieve_shot") ou /moves?
      */
     public function retrieveShotAction()
