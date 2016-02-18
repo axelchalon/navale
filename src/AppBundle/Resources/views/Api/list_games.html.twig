@@ -1,0 +1,17 @@
+{% extends 'AppBundle:template.html.twig' %}
+
+{% block body %}
+
+<h1>Liste des parties </h1>
+<div class="parties">
+	{% for game in games %}
+	<div class="partie">
+		<span class="nom">{{ game.name }} </span>
+		<form action="{{ path('join_game', {'game_id': 2}) }}" method="post">
+			<input type="submit" value="Rejoindre">
+		</form>
+	</div>
+	{% endfor %}
+</div>
+
+{% endblock %}

@@ -57,8 +57,9 @@ class ApiController extends FOSRestController
             $games = $em->getRepository('AppBundle:Game')->findGamesByNameFuzzy($paramFetcher->get('name'));
         else
             $games = $em->getRepository('AppBundle:Game')->findOpenGames();
-
-        return $this->view($games);
+        return $this->view($games)
+                    ->setTemplate("AppBundle:Api:list_games.html.twig")
+                    ->setTemplateData(array('games' => $games));;
     }
 
     /**
@@ -114,7 +115,7 @@ class ApiController extends FOSRestController
         $em = $this->getDoctrine()->getEntityManager();
         $em->persist($game);
         $em->flush();
-
+        
         return $this->view(array('secret' => $game->getP2Secret()));
     }
 
