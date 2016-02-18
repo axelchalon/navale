@@ -1,0 +1,15 @@
+{% extends 'AppBundle:template.html.twig' %}
+
+{% block title %}
+ Nouvelle partie
+{% endblock %}
+
+{% block body %}
+
+<h1>Partie créée </h1>
+<h2>{{ game.name }}</h2>
+<h4>Cliquez pour vérifier si quelqu'un a rejoint la partie</h4>
+<form action="{{ path('player2_joined', {'game_id': game.id }) }}" method="get">
+	<button type="submit" value="Créer une partie" class="btn btn-default">Vérifier</button>
+</form>	
+{% endblock %}
