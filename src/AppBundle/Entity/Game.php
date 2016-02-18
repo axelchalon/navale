@@ -58,7 +58,7 @@ class Game
 
     /**
      * @var string
-     * @ORM\Column(name="p1_shots_received", type="string", length=255, nullable=true)
+     * @ORM\Column(name="p1_shots_received", type="json_array", length=255, nullable=true)
      */
     private $p1ShotsReceived;
 
@@ -76,7 +76,7 @@ class Game
 
     /**
      * @var string
-     * @ORM\Column(name="p2_shots_received", type="string", length=255, nullable=true)
+     * @ORM\Column(name="p2_shots_received", type="json_array", length=255, nullable=true)
      */
     private $p2ShotsReceived;
 
@@ -186,7 +186,7 @@ class Game
 
     /**
      * Get p1Ships
-     * @return string
+     * @return array
      */
     public function getP1Ships()
     {
@@ -215,6 +215,7 @@ class Game
         $shipsPresets = [5,4,3,3,2]; // sizes
         $occupiedPositions = []; // {x: ?, y: ?}
 
+        // @todo enforce (int) size in JSON
         foreach ($ships as $ship)
         {
             if (!isset($ship['size']))
@@ -266,7 +267,11 @@ class Game
             $this->p2Ships = $ships;
         // else, exception @TODO
 
-
+        if ($this->playerHasPlacedShips(1) && $this->playerHasPlacedShips(2)) {
+            $this->p1ShotsReceived = []; // @fixme ça stocke null en BDD et pas un tableau vide en json
+            $this->p2ShotsReceived = [];
+            $this->nextPlayer = 1;
+        }
 
         return $this;
     }
@@ -284,11 +289,103 @@ class Game
 
     /**
      * Get p1ShotsReceived
-     * @return string
+     * @return array
      */
     public function getP1ShotsReceived()
     {
         return $this->p1ShotsReceived;
+    }
+
+    /**
+     * Make a move
+     * @return Game
+     */
+    public function playerShoots($player,$shotCoord)
+    {
+        // affects p2ShotsReceived
+
+        // @todo enforce (int) quand on stocke sur la bdd en json
+
+        $shotCoord['x'] = (int)$shotCoord['x'];
+        $shotCoord['y'] = (int)$shotCoord['y'];
+
+        if ($player == 1) {
+            $ships = $this->getP2Ships();
+            $shotsReceived = $this->getP2ShotsReceived();
+        } else if ($player == 2) {
+            $ships = $this->getP1Ships();
+            $shotsReceived = $this->getP1ShotsReceived();
+        }
+        else
+            return 1; // @TODO throw exception
+
+        foreach ($shotsReceived as &$_shotReceived)
+            $_shotReceived = array_intersect_key($_shotReceived, array_flip(['x', 'y']));// on enlève la clé "result"
+
+        if (!ctype_digit((string)$shotCoord['x']) || (int)$shotCoord['x'] < 0 || (int)$shotCoord['x'] > 9)
+            return 2; // @TODO throw exception
+
+        if (!ctype_digit((string)$shotCoord['y']) || (int)$shotCoord['y'] < 0 || (int)$shotCoord['y'] > 9)
+            return 3; // @TODO throw exception
+
+        foreach ($shotsReceived as $shotReceived)
+        {
+            if ($shotReceived['x'] == $shotCoord['x'] && $shotReceived['y'] == $shotCoord['y']) {
+                return 4; // @TODO throw error already played
+            }
+        }
+
+        $result = 'miss';
+
+        foreach ($ships as $ship) {
+            $sunk = true;
+            $playerJustShotOnShip = false;
+
+            if ($ship['direction'] == 'horizontal') {
+                $xp = 1; $yp = 0;
+            } else {
+                $xp = 0; $yp = 1;
+            }
+
+            // On parcourt chaque case du navire
+            for (
+                $x = (int)$ship['x'], $y = (int)$ship['y'], $remainingSize = (int)$ship['size'];
+                $remainingSize > 0;
+                $x += $xp, $y += $yp, $remainingSize--)
+            {
+                if ($shotCoord == (array('x' => $x, 'y' => $y))) // tir actuel
+                    $playerJustShotOnShip = true;
+                else if (!in_array(array('x' => $x, 'y' => $y),$shotsReceived)) // pas dans un ancien tir
+                    $sunk = false;
+            }
+
+            if ($playerJustShotOnShip)
+            {
+                $result = 'hit';
+                if ($sunk) $result = 'sunk';
+                break;
+            }
+        }
+
+        if ($player == 1) {
+            $this->p2ShotsReceived[] = ['x' => $shotCoord['x'], 'y' => $shotCoord['y'], 'result' => $result];
+        } else if ($player == 2) {
+            $this->p1ShotsReceived[] = ['x' => $shotCoord['x'], 'y' => $shotCoord['y'], 'result' => $result];
+        }
+        $this->nextPlayer = $this->nextPlayer == 1 ? '2' : '1';
+
+        return $result;
+    }
+
+    /**
+     * Make a move
+     * @return Game
+     */
+    public function retrieveShot($shot_id)
+    {
+        //$shots[$shot_id] ==> x,y,result
+        // affects p2ShotsReceived
+        // @TODO
     }
 
     /**
@@ -347,7 +444,7 @@ class Game
 
     /**
      * Get p2Ships
-     * @return string
+     * @return array
      */
     public function getP2Ships()
     {
@@ -367,7 +464,7 @@ class Game
 
     /**
      * Get p2ShotsReceived
-     * @return string
+     * @return array
      */
     public function getP2ShotsReceived()
     {

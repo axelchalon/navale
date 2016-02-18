@@ -174,11 +174,14 @@ class ApiController extends FOSRestController
         if ($player === null)
             return $this->view(array('error' => 'Bad secret.'),403);
 
-        if (!$game->isFull())
+        if (!$game->isFull()) // @todo mettre ces vérifs dans l'entité
             return $this->view(array('error' => 'No one has joined yet.'),403);
 
         if ($game->playerHasPlacedShips($player))
             return $this->view(array('error' => 'You\'ve already placed your ships.'),403);
+
+        if (!($res = $game->setPlayerShips($player,$paramFetcher->get('ships'))) instanceof Game) // can throw exception @TODO
+            var_dump($res);
 
         $em = $this->getDoctrine()->getEntityManager();
         $em->persist($game);
@@ -228,13 +231,35 @@ class ApiController extends FOSRestController
      *          400: "Le coup n'est pas valide, ou bien ce n'est pas à votre tour de jouer."
      *      }
      * )
+     *
+     * @RequestParam(name="secret", nullable=false, description="Secret du joueur")
+     * @RequestParam(name="x", nullable=false, description="Position X du tir")
+     * @RequestParam(name="y", nullable=false, description="Position Y du tir")
      * @ParamConverter("game", class="AppBundle:Game", options={"id" = "game_id"})
      * @Post("/games/{game_id}/moves", name="shoot")
      */
-    public function shootAction()
+    public function shootAction(Game $game, ParamFetcher $paramFetcher)
     {
-        // tester si joueur est dans la room (token/compte), tester à qui le tour, tester si shot déjà joué
-        return new Response();
+        $player = $game->getPlayerBySecret($paramFetcher->get('secret'));
+
+        if ($player === null)
+            return $this->view(array('error' => 'Bad secret.'),403);
+
+        if (!$game->isFull())
+            return $this->view(array('error' => 'The game isn\'t full yet.'),403);
+
+        if ($game->getNextPlayer() === null || (int)$game->getNextPlayer() !== (int)$player)
+            return $this->view(array('error' => 'It\'s not your turn to play.'),403);
+
+        $result = $game->playerShoots($player,['x' => $paramFetcher->get('x'), 'y' => $paramFetcher->get('y')]); // can throw exception @TODO
+        if (is_int($result))
+            exit('Erreur : ' . $result);
+
+        $em = $this->getDoctrine()->getEntityManager();
+        $em->persist($game);
+        $em->flush();
+
+        return $this->view(array('result' => $result),200);
     }
 
     /**
