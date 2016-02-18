@@ -17,7 +17,7 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use AppBundle\Entity\Game;
 
 /**
- * @Route("/api/v1")
+ * @Route("/")
  */
 class ApiController extends FOSRestController
 {
@@ -43,6 +43,7 @@ class ApiController extends FOSRestController
      * @QueryParam(name="type", requirements="public", nullable=true, description="Filtrer les parties par type.")
      * @QueryParam(name="name", requirements=".+", nullable=true, description="Filtrer les parties par nom.")
      * @Get("/games", name="list_games")
+     * @Get("/api/v1/games", name="list_games_api")
      */
     public function listGamesAction(ParamFetcher $paramFetcher)
     {
@@ -140,10 +141,10 @@ class ApiController extends FOSRestController
      */
     public function player2JoinedAction(Game $game)
     {
-        if ($game->isFull())
+        if (!$game->isFull())
             return $this->view(array('error' => 'No one has joined yet.'),404);
 
-        return $this->view(array('error' => 'Somebody joined!'),200);
+        return $this->view(array('info' => 'Somebody joined!'),200);
     }
 
     /**
@@ -166,16 +167,35 @@ class ApiController extends FOSRestController
      *          403: "Mauvais secret."
      *      }
      * )
+     * @ParamConverter("game", class="AppBundle:Game", options={"id" = "game_id"})
+     * @RequestParam(name="secret", nullable=false, description="Secret du joueur")
+     * @RequestParam(name="ships", array=true, nullable=false, description="Tableau de {x, y, size, direction <horizontal|vertical>}")
      * @Post("/games/{game_id}/ships", name="place_ships")
      */
-    public function placeShipsAction()
+    public function placeShipsAction(Game $game, ParamFetcher $paramFetcher)
     {
-        return new Response();
+        $player = $game->getPlayerBySecret($paramFetcher->get('secret'));
+        // @TODO Exception in Game entity if bad secret?
+        if ($player === null)
+            return $this->view(array('error' => 'Bad secret.'),403);
+
+        if (!$game->isFull()) // @todo mettre ces vérifs dans l'entité
+            return $this->view(array('error' => 'No one has joined yet.'),403);
+
+        if ($game->playerHasPlacedShips($player))
+            return $this->view(array('error' => 'You\'ve already placed your ships.'),403);
+
+        if (!($res = $game->setPlayerShips($player,$paramFetcher->get('ships'))) instanceof Game) // can throw exception @TODO
+            var_dump($res);
+
+        $em = $this->getDoctrine()->getEntityManager();
+        $em->persist($game);
+        $em->flush();
+
+        return $this->view(array('info' => 'Ships placed!'),200);
     }
 
     /**
-     * {ships: [{size: 4, x: 3, y:5, direction: 'horizontal' / 'vertical'}, {...}]}}
-     *
      * return 404 {ready: false} ou 200 {ready: true}
      * @ApiDoc(
      *      description="Indique si l'adversaire a placé ses navires.",
@@ -186,11 +206,15 @@ class ApiController extends FOSRestController
      *          404: "L'adversaire n'a pas encore placé ses navires."
      *      }
      * )
+     * @ParamConverter("game", class="AppBundle:Game", options={"id" = "game_id"})
      * @Get("/games/{game_id}/players/{player_id}/ships", name="playerX_placed_ships")
      */
-    public function shipsPlacedAction()
+    public function shipsPlacedAction(Game $game, $player_id)
     {
-        return new Response();
+        if (!$game->playerHasPlacedShips($player_id))
+            return $this->view(array('error' => 'The player\'s ships haven\'t been placed yet.'),404);
+
+        return $this->view(array('info' => 'The player\'s ships have been placed.'),200);
     }
 
     /**
@@ -212,12 +236,35 @@ class ApiController extends FOSRestController
      *          400: "Le coup n'est pas valide, ou bien ce n'est pas à votre tour de jouer."
      *      }
      * )
+     *
+     * @RequestParam(name="secret", nullable=false, description="Secret du joueur")
+     * @RequestParam(name="x", nullable=false, description="Position X du tir")
+     * @RequestParam(name="y", nullable=false, description="Position Y du tir")
+     * @ParamConverter("game", class="AppBundle:Game", options={"id" = "game_id"})
      * @Post("/games/{game_id}/moves", name="shoot")
      */
-    public function shootAction()
+    public function shootAction(Game $game, ParamFetcher $paramFetcher)
     {
-        // tester si joueur est dans la room (token/compte), tester à qui le tour, tester si shot déjà joué
-        return new Response();
+        $player = $game->getPlayerBySecret($paramFetcher->get('secret'));
+
+        if ($player === null)
+            return $this->view(array('error' => 'Bad secret.'),403);
+
+        if (!$game->isFull())
+            return $this->view(array('error' => 'The game isn\'t full yet.'),403);
+
+        if ($game->getNextPlayer() === null || (int)$game->getNextPlayer() !== (int)$player)
+            return $this->view(array('error' => 'It\'s not your turn to play.'),403);
+
+        $result = $game->playerShoots($player,['x' => $paramFetcher->get('x'), 'y' => $paramFetcher->get('y')]); // can throw exception @TODO
+        if (is_int($result))
+            exit('Erreur : ' . $result);
+
+        $em = $this->getDoctrine()->getEntityManager();
+        $em->persist($game);
+        $em->flush();
+
+        return $this->view(array('result' => $result),200);
     }
 
     /**
@@ -232,6 +279,7 @@ class ApiController extends FOSRestController
      *          404: "L'adversaire n'a pas encore joué ce coup."
      *      }
      * )
+     * @ParamConverter("game", class="AppBundle:Game", options={"id" = "game_id"})
      * @Get("/games/{game_id}/moves/{move_id}", name="retrieve_shot") ou /moves?
      */
     public function retrieveShotAction()

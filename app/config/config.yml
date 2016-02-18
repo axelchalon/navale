@@ -76,8 +76,8 @@ fos_rest:
     format_listener:
         enabled: true
         rules:
-            - { path: '^/api/v1/', priorities: ['json', 'xml', 'html'], fallback_format: json, prefer_extension: true }
-            - { path: '^/', stop: true }
+            - { path: '^/api/v1/', priorities: ['json', 'xml'], fallback_format: json, prefer_extension: true }
+            - { path: '^/', priorities: ['html'], fallback_format: json, prefer_extension: true }
 
 # Enable the configuration of NelmioApiDoc
 nelmio_api_doc:
