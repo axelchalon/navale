@@ -17,7 +17,7 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use AppBundle\Entity\Game;
 
 /**
- * @Route("/api/v1")
+ * @Route("/")
  */
 class ApiController extends FOSRestController
 {
@@ -43,6 +43,7 @@ class ApiController extends FOSRestController
      * @QueryParam(name="type", requirements="public", nullable=true, description="Filtrer les parties par type.")
      * @QueryParam(name="name", requirements=".+", nullable=true, description="Filtrer les parties par nom.")
      * @Get("/games", name="list_games")
+     * @Get("/api/v1/games", name="list_games_api")
      */
     public function listGamesAction(ParamFetcher $paramFetcher)
     {
