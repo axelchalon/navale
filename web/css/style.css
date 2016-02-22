@@ -26,7 +26,7 @@ form{
 .creer{
 	margin: 30px 0;
 }
-.creer form, .creer .btn-default{
+.creer form{
 	width: 200px;
 }
 

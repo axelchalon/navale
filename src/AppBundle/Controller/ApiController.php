@@ -49,7 +49,6 @@ class ApiController extends FOSRestController
     {
         $em = $this->getDoctrine()->getManager();
         
-        $this->getDoctrine()->getManager();
         if ($paramFetcher->get('type') === 'public' && $paramFetcher->get('name') === null)
             $games = $em->getRepository('AppBundle:Game')->findOpenPublicGames();
         else if ($paramFetcher->get('type') === 'public' && $paramFetcher->get('name') !== null)
@@ -58,9 +57,10 @@ class ApiController extends FOSRestController
             $games = $em->getRepository('AppBundle:Game')->findGamesByNameFuzzy($paramFetcher->get('name'));
         else
             $games = $em->getRepository('AppBundle:Game')->findOpenGames();
+
         return $this->view($games)
                     ->setTemplate("AppBundle:Api:list_games.html.twig")
-                    ->setTemplateData(array('games' => $games));;
+                    ->setTemplateData(array('games' => $games));
     }
 
     /**
@@ -155,7 +155,7 @@ class ApiController extends FOSRestController
         }
 
         return $this->view(array('info' => 'Somebody joined!'),200)
-                        ->setTemplate('AppBundle:Api:join.html.twig');
+                        ->setTemplate('AppBundle:Api:no_player_join.html.twig');
     }
 
     /**
@@ -203,7 +203,6 @@ class ApiController extends FOSRestController
         $em = $this->getDoctrine()->getEntityManager();
         $em->persist($game);
         $em->flush();
-
 
         return $this->view(array('info' => 'Ships placed!'),200)
                     ->setTemplate('AppBundle:Api:verify_placed_ships.html.twig')
