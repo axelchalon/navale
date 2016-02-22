@@ -1,13 +1,17 @@
+/* Page d'accueil list_games */
 body{
 	background-color: #F5F5F5; color: #454545;
-	font-family: Arial, sans-serif;
 	text-align: center;
+}
+h1{
+	font-family: Oswald, sans-serif;
 }
 .parties{
 	display: inline-block;
 	width: 600px;
 	padding: 20px 30px;
 	text-align: left;
+	border: 1px solid black;
 }
 .partie{
 	margin: 10px;
@@ -16,5 +20,16 @@ body{
 	display: inline-block; width: 400px;
 }
 form{
-	display: inline-block; width: 150px;
+	display: inline-block; width: 100px;
+}
+
+.creer{
+	margin: 30px 0;
+}
+.creer form{
+	width: 200px;
+}
+
+.form-control{
+	margin-bottom: 20px;
 }
