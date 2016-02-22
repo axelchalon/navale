@@ -20,7 +20,7 @@ h1{
 	display: inline-block; width: 400px;
 }
 form{
-	display: inline-block; width: 100px;
+	display: inline-block;
 }
 
 .creer{
@@ -32,4 +32,19 @@ form{
 
 .form-control{
 	margin-bottom: 20px;
+}
+.placeShip{
+	margin: 50px 50px;
+}
+.placeShip div[class^="choice"]{
+	margin: 20px;
+}
+.placeShip div > span > input{
+	display: inline-block;
+	width: 100px;
+	margin: 0px 10px;
+}
+
+.confirm{
+	margin-top: 40px;
 }

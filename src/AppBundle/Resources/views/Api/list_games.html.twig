@@ -7,7 +7,7 @@
 	{% for game in games %}
 	<div class="partie">
 		<span class="nom">{{ game.name }} </span>
-		<form action="{{ path('join_game', {'game_id': game.id }) }}" method="post">
+		<form action="{{ path('join_game', {'game_id': game.id }) }}" method="post" class="join">
 			<input type="submit" value="Rejoindre" class="btn btn-primary">
 		</form>
 	</div>

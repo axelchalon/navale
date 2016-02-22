@@ -8,35 +8,41 @@
 
 <h1>Placer les navires : </h1>
 
-<form action="{{ path('place_ships', {'game_id': game.id }) }}" method="post">
+<form action="{{ path('place_ships', {'game_id': game.id }) }}" method="post" class="placeShip">
 
 	<input type="hidden" name="secret" value="{{ secret }}">
 
 	<input type="hidden" name="ships[0][size]" value="5">
-	x: <input type="text" name="ships[0][x]" class="form-control" value="0">
-	y: <input type="text" name="ships[0][y]" class="form-control" value="0">
-	direction: <input type="text" name="ships[0][direction]" value="horizontal" class="form-control">
-
+	<div class="choice-1">
+		<span>x: <input type="text" name="ships[0][x]" class="form-control" value="0"></span>
+		<span>y: <input type="text" name="ships[0][y]" class="form-control" value="0"></span>
+		<span>direction: <input type="text" name="ships[0][direction]" value="horizontal" class="form-control"></span>
+	</div>
+	<div class="choice-2">
 	<input type="hidden" name="ships[1][size]" value="4">
-	x: <input type="text" name="ships[1][x]" class="form-control" value="0">
-	y: <input type="text" name="ships[1][y]" class="form-control" value="1">
-	direction: <input type="text" name="ships[1][direction]" value="horizontal" class="form-control">
-
+		<span>x: <input type="text" name="ships[1][x]" class="form-control" value="0"></span>
+		<span>y: <input type="text" name="ships[1][y]" class="form-control" value="1"></span>
+		<span>direction: <input type="text" name="ships[1][direction]" value="horizontal" class="form-control"></span>
+	</div>
+	<div class="choice-3">
 	<input type="hidden" name="ships[2][size]" value="3">
-	x: <input type="text" name="ships[2][x]" class="form-control" value="0">
-	y: <input type="text" name="ships[2][y]" class="form-control" value="2">
-	direction: <input type="text" name="ships[2][direction]" value="horizontal" class="form-control">
-
+		<span>x: <input type="text" name="ships[2][x]" class="form-control" value="0"></span>
+		<span>y: <input type="text" name="ships[2][y]" class="form-control" value="2"></span>
+		<span>direction: <input type="text" name="ships[2][direction]" value="horizontal" class="form-control"></span>
+	</div>
+	<div class="choice-4">
 	<input type="hidden" name="ships[3][size]" value="3">
-	x: <input type="text" name="ships[3][x]" class="form-control" value="0">
-	y: <input type="text" name="ships[3][y]" class="form-control" value="3">
-	direction: <input type="text" name="ships[3][direction]" value="horizontal" class="form-control">
-
+		<span>x: <input type="text" name="ships[3][x]" class="form-control" value="0"></span>
+		<span>y: <input type="text" name="ships[3][y]" class="form-control" value="3"></span>
+		<span>direction: <input type="text" name="ships[3][direction]" value="horizontal" class="form-control"></span>
+	</div>
+	<div class="choice-5">
 	<input type="hidden" name="ships[4][size]" value="2">
-	x: <input type="text" name="ships[4][x]" class="form-control" value="0">
-	y: <input type="text" name="ships[4][y]" class="form-control" value="4">
-	direction: <input type="text" name="ships[4][direction]" value="horizontal" class="form-control">
-	<button type="submit" class="btn btn-default">Enregistrer</button>
+		<span>x: <input type="text" name="ships[4][x]" class="form-control" value="0"></span>
+		<span>y: <input type="text" name="ships[4][y]" class="form-control" value="4"></span>
+		<span>direction: <input type="text" name="ships[4][direction]" value="horizontal" class="form-control"></span>
+	</div>
+	<button type="submit" class="btn btn-success confirm">Confirmer</button>
 </form>	
 <!-- jouer un coup :
 <input type="hidden" name="secret" value="">

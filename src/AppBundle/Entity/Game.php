@@ -30,6 +30,11 @@ class Game
      */
     private $id;
 
+    public function add($a, $b)
+    {
+        return $a + $b;
+    }
+
     /**
      * @var string
      * @ORM\Column(name="name", type="string", length=255)
