@@ -1,0 +1,580 @@
+{
+	"id": "3048ecaf-6c16-38f1-db4a-3711f470a014",
+	"name": "Bataille navale E02",
+	"description": "https://github.com/axelchalon/navale",
+	"order": [
+		"e0f9a3c1-6332-3889-2a8c-148836f250d9",
+		"2fc9c36a-77e3-ab4c-e6da-c59aa078051a",
+		"c2bdf7b9-e83e-c2cb-b77e-e1bbef9e0d94",
+		"ca8bbc18-df9f-75ac-be3b-6887bf8a7d40",
+		"7a6ed05f-561c-66f2-487a-258cbe18cbdb",
+		"fb2e6fb0-0851-ceba-556c-1547e939acc2",
+		"fea983b1-421d-037f-3b27-75b8d556d4ed",
+		"b559c1e2-d5ce-dbd6-c32a-0bb9bac6d9e9",
+		"b38ce36d-5504-63e0-01a3-7bed1180c718",
+		"622be1bc-2760-a95a-bd1c-8a3a868ed3d9",
+		"0436c1d9-5739-c29b-bbd0-fce54a76caa7",
+		"5579b280-3351-ccb7-a929-55229d8ab653"
+	],
+	"folders": [],
+	"timestamp": 1456435268340,
+	"owner": 0,
+	"remoteLink": "",
+	"public": false,
+	"requests": [
+		{
+			"id": "0436c1d9-5739-c29b-bbd0-fce54a76caa7",
+			"headers": "",
+			"url": "127.0.0.1:8000/api/v1/games/11/moves",
+			"preRequestScript": "",
+			"pathVariables": {},
+			"method": "POST",
+			"data": [
+				{
+					"key": "secret",
+					"value": "baa01bce7eff2f9c6545",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "x",
+					"value": "0",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "y",
+					"value": "0",
+					"type": "text",
+					"enabled": true
+				}
+			],
+			"dataMode": "params",
+			"version": 2,
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1456436960252,
+			"name": "Jouer un coup",
+			"description": "",
+			"collectionId": "3048ecaf-6c16-38f1-db4a-3711f470a014",
+			"responses": []
+		},
+		{
+			"id": "2fc9c36a-77e3-ab4c-e6da-c59aa078051a",
+			"headers": "",
+			"url": "127.0.0.1:8000/api/v1/games?name=est",
+			"pathVariables": {},
+			"preRequestScript": "",
+			"method": "GET",
+			"collectionId": "3048ecaf-6c16-38f1-db4a-3711f470a014",
+			"data": [],
+			"dataMode": "params",
+			"name": "Récupérer toutes les parties en attente, filtrer par nom",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1456435360875,
+			"version": 2,
+			"responses": [],
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {}
+		},
+		{
+			"id": "5579b280-3351-ccb7-a929-55229d8ab653",
+			"headers": "",
+			"url": "127.0.0.1:8000/api/v1/games/11/moves/1",
+			"preRequestScript": "",
+			"pathVariables": {},
+			"method": "GET",
+			"data": [
+				{
+					"key": "secret",
+					"value": "baa01bce7eff2f9c6545",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "x",
+					"value": "0",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "y",
+					"value": "0",
+					"type": "text",
+					"enabled": true
+				}
+			],
+			"dataMode": "params",
+			"version": 2,
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1456437589659,
+			"name": "Récupérer un coup",
+			"description": "",
+			"collectionId": "3048ecaf-6c16-38f1-db4a-3711f470a014",
+			"responses": []
+		},
+		{
+			"id": "622be1bc-2760-a95a-bd1c-8a3a868ed3d9",
+			"headers": "",
+			"url": "127.0.0.1:8000/api/v1/games/11/players/2/ships",
+			"pathVariables": {},
+			"preRequestScript": "",
+			"method": "GET",
+			"collectionId": "3048ecaf-6c16-38f1-db4a-3711f470a014",
+			"data": [
+				{
+					"key": "secret",
+					"value": "baa01bce7eff2f9c6545",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "ships[0][size]",
+					"value": "5",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "ships[0][direction]",
+					"value": "horizontal",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "ships[0][x]",
+					"value": "0",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "ships[0][y]",
+					"value": "0",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "ships[1][size]",
+					"value": "4",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "ships[1][direction]",
+					"value": "horizontal",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "ships[1][x]",
+					"value": "0",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "ships[1][y]",
+					"value": "1",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "ships[2][size]",
+					"value": "3",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "ships[2][direction]",
+					"value": "horizontal",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "ships[2][x]",
+					"value": "0",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "ships[2][y]",
+					"value": "2",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "ships[3][size]",
+					"value": "3",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "ships[3][direction]",
+					"value": "horizontal",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "ships[3][x]",
+					"value": "0",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "ships[3][y]",
+					"value": "3",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "ships[4][size]",
+					"value": "2",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "ships[4][x]",
+					"value": "0",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "ships[4][y]",
+					"value": "4",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "ships[4][direction]",
+					"value": "horizontal",
+					"type": "text",
+					"enabled": true
+				}
+			],
+			"dataMode": "params",
+			"name": "Vérfier si le joueur a placé ses navires",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1456436817289,
+			"version": 2,
+			"responses": [],
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {}
+		},
+		{
+			"id": "7a6ed05f-561c-66f2-487a-258cbe18cbdb",
+			"headers": "",
+			"url": "127.0.0.1:8000/api/v1/games",
+			"preRequestScript": "",
+			"pathVariables": {},
+			"method": "POST",
+			"data": [
+				{
+					"key": "name",
+					"value": "Ici le nom de ma partie !",
+					"type": "text",
+					"enabled": true
+				}
+			],
+			"dataMode": "params",
+			"version": 2,
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1456435552501,
+			"name": "Créer une partie",
+			"description": "",
+			"collectionId": "3048ecaf-6c16-38f1-db4a-3711f470a014",
+			"responses": []
+		},
+		{
+			"id": "b38ce36d-5504-63e0-01a3-7bed1180c718",
+			"headers": "",
+			"url": "127.0.0.1:8000/api/v1/games/11/ships",
+			"preRequestScript": "",
+			"pathVariables": {},
+			"method": "POST",
+			"data": [
+				{
+					"key": "secret",
+					"value": "abcdxf1hi2kl6nopqrst",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "ships[0][size]",
+					"value": "5",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "ships[0][direction]",
+					"value": "horizontal",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "ships[0][x]",
+					"value": "0",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "ships[0][y]",
+					"value": "0",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "ships[1][size]",
+					"value": "4",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "ships[1][direction]",
+					"value": "horizontal",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "ships[1][x]",
+					"value": "0",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "ships[1][y]",
+					"value": "1",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "ships[2][size]",
+					"value": "3",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "ships[2][direction]",
+					"value": "horizontal",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "ships[2][x]",
+					"value": "0",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "ships[2][y]",
+					"value": "2",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "ships[3][size]",
+					"value": "3",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "ships[3][direction]",
+					"value": "horizontal",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "ships[3][x]",
+					"value": "0",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "ships[3][y]",
+					"value": "3",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "ships[4][size]",
+					"value": "2",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "ships[4][x]",
+					"value": "0",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "ships[4][y]",
+					"value": "4",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "ships[4][direction]",
+					"value": "horizontal",
+					"type": "text",
+					"enabled": true
+				}
+			],
+			"dataMode": "params",
+			"version": 2,
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1456436708764,
+			"name": "Placement des navires",
+			"description": "Nécessite d'envoyer le secret reçu lorsque l'on a créé ou rejoint la partie.",
+			"collectionId": "3048ecaf-6c16-38f1-db4a-3711f470a014",
+			"responses": []
+		},
+		{
+			"id": "b559c1e2-d5ce-dbd6-c32a-0bb9bac6d9e9",
+			"headers": "",
+			"url": "127.0.0.1:8000/api/v1/games/6/players",
+			"pathVariables": {},
+			"preRequestScript": "",
+			"method": "POST",
+			"collectionId": "3048ecaf-6c16-38f1-db4a-3711f470a014",
+			"data": [
+				{
+					"key": "password",
+					"value": "mdp",
+					"type": "text",
+					"enabled": true
+				}
+			],
+			"dataMode": "params",
+			"name": "Rejoindre une partie avec mot de passe",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1456436173242,
+			"version": 2,
+			"responses": [],
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {}
+		},
+		{
+			"id": "c2bdf7b9-e83e-c2cb-b77e-e1bbef9e0d94",
+			"headers": "",
+			"url": "127.0.0.1:8000/api/v1/games?name=e&type=public",
+			"pathVariables": {},
+			"preRequestScript": "",
+			"method": "GET",
+			"collectionId": "3048ecaf-6c16-38f1-db4a-3711f470a014",
+			"data": [],
+			"dataMode": "params",
+			"name": "Récupérer toutes les parties en attente, sans mot de passe, filtrer par nom",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1456435418401,
+			"version": 2,
+			"responses": [],
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {}
+		},
+		{
+			"id": "ca8bbc18-df9f-75ac-be3b-6887bf8a7d40",
+			"headers": "Accept: text/xml\n",
+			"url": "127.0.0.1:8000/api/v1/games",
+			"pathVariables": {},
+			"preRequestScript": "",
+			"method": "GET",
+			"collectionId": "3048ecaf-6c16-38f1-db4a-3711f470a014",
+			"data": [],
+			"dataMode": "params",
+			"name": "Récupérer toutes les parties en attente au format XML",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1456435467363,
+			"version": 2,
+			"responses": [],
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {}
+		},
+		{
+			"id": "e0f9a3c1-6332-3889-2a8c-148836f250d9",
+			"headers": "",
+			"url": "127.0.0.1:8000/api/v1/games",
+			"pathVariables": {},
+			"preRequestScript": "",
+			"method": "GET",
+			"collectionId": "3048ecaf-6c16-38f1-db4a-3711f470a014",
+			"data": [],
+			"dataMode": "params",
+			"name": "Récupérer toutes les parties en attente",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1456435340666,
+			"version": 2,
+			"responses": [],
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {}
+		},
+		{
+			"id": "fb2e6fb0-0851-ceba-556c-1547e939acc2",
+			"headers": "",
+			"url": "127.0.0.1:8000/api/v1/games",
+			"pathVariables": {},
+			"preRequestScript": "",
+			"method": "POST",
+			"collectionId": "3048ecaf-6c16-38f1-db4a-3711f470a014",
+			"data": [
+				{
+					"key": "name",
+					"value": "Ici le nom de ma partie !",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "password",
+					"value": "mdp",
+					"type": "text",
+					"enabled": true
+				}
+			],
+			"dataMode": "params",
+			"name": "Créer une partie avec mot de passe",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1456435571822,
+			"version": 2,
+			"responses": [],
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {}
+		},
+		{
+			"id": "fea983b1-421d-037f-3b27-75b8d556d4ed",
+			"headers": "",
+			"url": "127.0.0.1:8000/api/v1/games/1/players",
+			"preRequestScript": "",
+			"pathVariables": {},
+			"method": "POST",
+			"data": [],
+			"dataMode": "params",
+			"version": 2,
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1456436186355,
+			"name": "Rejoindre une partie",
+			"description": "",
+			"collectionId": "3048ecaf-6c16-38f1-db4a-3711f470a014",
+			"responses": []
+		}
+	]
+}
