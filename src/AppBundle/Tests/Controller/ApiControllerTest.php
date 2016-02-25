@@ -61,9 +61,9 @@
       {
         $client = static::createClient();
      
-        $crawler = $client->request('GET', '/games/127/players/2');
+        $crawler = $client->request('GET', '/games/178/players/2');
         $this->assertEquals('AppBundle\Controller\ApiController::player2JoinedAction', $client->getRequest()->attributes->get('_controller'));
-        $this->assertTrue(200 === $client->getResponse()->getStatusCode());
+        $this->assertTrue(404 === $client->getResponse()->getStatusCode());
         $this->assertTrue($client->getResponse()->headers->contains('Content-Type','text/html; charset=UTF-8'));
 
       }
@@ -71,9 +71,10 @@
       {
         $client = static::createClient();
      
-        $crawler = $client->request('GET', 'api/v1/games/127/players/2');
+        $crawler = $client->request('GET', 'api/v1/games/178/players/2');
         $this->assertEquals('AppBundle\Controller\ApiController::player2JoinedAction', $client->getRequest()->attributes->get('_controller'));
-        $this->assertTrue(200 === $client->getResponse()->getStatusCode());
+        
+        $this->assertTrue(404 === $client->getResponse()->getStatusCode());
         $this->assertTrue($client->getResponse()->headers->contains('Content-Type','text/xml; charset=UTF-8'));
 
       }      
@@ -81,7 +82,7 @@
       {
         $client = static::createClient();
      
-        $crawler = $client->request('POST', '/games/127/ships');
+        $crawler = $client->request('POST', '/games/178/ships');
         $this->assertEquals('AppBundle\Controller\ApiController::placeShipsAction', $client->getRequest()->attributes->get('_controller'));
         $this->assertTrue(400 === $client->getResponse()->getStatusCode());
         $this->assertTrue($client->getResponse()->headers->contains('Content-Type','text/html; charset=UTF-8'));
@@ -91,7 +92,7 @@
       {
         $client = static::createClient();
      
-        $crawler = $client->request('GET', '/games/127/players/2/ships');
+        $crawler = $client->request('GET', '/games/178/players/2/ships');
         $this->assertEquals('AppBundle\Controller\ApiController::shipsPlacedAction', $client->getRequest()->attributes->get('_controller'));
         $this->assertTrue(404 === $client->getResponse()->getStatusCode());
         $this->assertTrue($client->getResponse()->headers->contains('Content-Type','text/html; charset=UTF-8'));
@@ -100,7 +101,7 @@
       {
         $client = static::createClient();
      
-        $crawler = $client->request('GET', 'api/v1/games/127/players/2/ships');
+        $crawler = $client->request('GET', 'api/v1/games/178/players/2/ships');
         $this->assertEquals('AppBundle\Controller\ApiController::shipsPlacedAction', $client->getRequest()->attributes->get('_controller'));
         $this->assertTrue(404 === $client->getResponse()->getStatusCode());
         $this->assertTrue($client->getResponse()->headers->contains('Content-Type','text/xml; charset=UTF-8'));
