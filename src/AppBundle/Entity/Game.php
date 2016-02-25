@@ -337,7 +337,7 @@ class Game
         }
 
         $result = 'miss';
-
+        $game_over = true;
         foreach ($ships as $ship) {
             $sunk = true;
             $playerJustShotOnShip = false;
@@ -356,11 +356,13 @@ class Game
             {
                 if ($shotCoord == (array('x' => $x, 'y' => $y))) // tir actuel
                     $playerJustShotOnShip = true;
-                else if (!in_array(array('x' => $x, 'y' => $y),$shotsReceived)) // pas dans un ancien tir
+                else if (!in_array(array('x' => $x, 'y' => $y),$shotsReceived)) { // pas dans un ancien tir
                     $sunk = false;
+                    $game_over = false;
+                }
             }
 
-            if ($playerJustShotOnShip)
+            if ($playerJustShotOnShip && $result == 'miss')
             {
                 $result = 'hit';
                 if ($sunk) $result = 'sunk';
@@ -373,20 +375,37 @@ class Game
         } else if ($player == 2) {
             $this->p1ShotsReceived[] = ['x' => $shotCoord['x'], 'y' => $shotCoord['y'], 'result' => $result];
         }
-        $this->nextPlayer = $this->nextPlayer == 1 ? '2' : '1';
+
+        if ($game_over) {
+            $result = 'win';
+            $this->nextPlayer = null;
+        }
+        else
+            $this->nextPlayer = $this->nextPlayer == 1 ? '2' : '1';
+
 
         return $result;
     }
 
     /**
-     * Make a move
+     * Get game over
+     * @return bool
+     */
+    public function isGameOver()
+    {
+        return $this->nextPlayer === null && $this->p2Secret !== null;
+    }
+    /**
+     * Get a move
      * @return Game
      */
-    public function retrieveShot($shot_id)
+    public function retrieveShot($shot)
     {
-        //$shots[$shot_id] ==> x,y,result
-        // affects p2ShotsReceived
-        // @TODO
+        $shots = array_merge($this->p2ShotsReceived,$this->p1ShotsReceived);
+        if (!isset($shots[(int)$shot-1]))
+            throw new HttpException(400, "Move doesn't exist.");
+
+        return $shots[(int)$shot-1];
     }
 
     /**

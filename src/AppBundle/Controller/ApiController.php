@@ -14,6 +14,8 @@ use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Request\ParamFetcher;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
+use Symfony\Component\HttpKernel\Exception\HttpException;
+
 use AppBundle\Entity\Game;
 
 /**
@@ -273,6 +275,9 @@ class ApiController extends FOSRestController
         if (!$game->isFull())
             throw new HttpException(400, 'The game isn\'t full yet.');
 
+        if ($game->isGameOver())
+            throw new HttpException(400, 'Game over.');
+
         if ($game->getNextPlayer() === null || (int)$game->getNextPlayer() !== (int)$player)
             throw new HttpException(400, 'It\'s not your turn to play.');
 
@@ -303,9 +308,9 @@ class ApiController extends FOSRestController
      * @Get("/api/v1/games/{game_id}/moves/{move_id}", name="retrieve_shot_api") ou /moves?
      * @Get("/games/{game_id}/moves/{move_id}", name="retrieve_shot") ou /moves?
      */
-    public function retrieveShotAction()
+    public function retrieveShotAction(Game $game, $move_id, ParamFetcher $paramFetcher)
     {
-        // tester si joueur est dans la room (token/compte), tester à qui le tour, tester si shot déjà joué
-        return new Response();
+        $move = $game->retrieveShot($move_id);
+        return $this->view(array('move' => $move),200);
     }
 }

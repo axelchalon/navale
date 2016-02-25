@@ -1,5 +1,17 @@
 AppBundle\Entity\Game:
-    game_{1..10}:
+    game_1:
+        name: <sentence(3)>
+        p1Secret: abcdxf1hi2kl6nopqrst
+        password: ~
+    game_{2..5}:
         name: <sentence(3)>
         p1Secret: <regexify('[0-9a-f]{20}')>
-        password: 50%? <password()>
+        password: ~
+    game_6:
+        name: <sentence(3)>
+        p1Secret: abcdxf1hi2kl6nopqrst
+        password: mdp
+    game_{7..10}:
+        name: <sentence(3)>
+        p1Secret: <regexify('[0-9a-f]{20}')>
+        password: mdp
