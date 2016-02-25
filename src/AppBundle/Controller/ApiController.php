@@ -84,7 +84,7 @@ class ApiController extends FOSRestController
         $game->generateP1Secret();
         $game->setPassword($paramFetcher->get('password'));
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $em->persist($game);
         $em->flush();
 

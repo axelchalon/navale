@@ -1,31 +1,39 @@
 <?php
-// src/Blogger/BlogBundle/Tests/Repository/GameRepositoryTest.php
+// src/AppBundle/Tests/Repository/GameRepositoryTest.php
 
 namespace AppBundle\Tests\Repository;
 
-use AppBundle\Repository\GameRepository;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class GameRepositoryTest extends WebTestCase
 {
-    /**
-     * @var \AppBundle\Repository\GameRepository
-     */
-    private $GameRepository;
+    private $gameRepository;
+    private $gamePublicRepo;
+    private $gamesByName;
 
     public function setUp()
     {  
         // Accède à la méthode findOpenGames() du répository GameRepository
         $kernel = static::createKernel();
         $kernel->boot();
-        $this->GameRepository = $kernel->getContainer()
+        $this->gameRepository = $kernel->getContainer()
                                        ->get('doctrine.orm.entity_manager')
                                        ->getRepository('AppBundle:Game')->findOpenGames();
+        // méthode findOpenPublicGames()
+        $this->gamePublicRepo = $kernel->getContainer()
+                                        ->get('doctrine.orm.entity_manager')
+                                        ->getRepository('AppBundle:Game')->findOpenPublicGames();
+        // méthode findGamesByNameFuzzy()
+        $this->gamesByName = $kernel->getContainer()
+                                        ->get('doctrine.orm.entity_manager')
+                                        ->getRepository('AppBundle:Game')->findGamesByNameFuzzy('Recusandae asperiores accusamus nihil.');
     }
+
+    // TEST findOpenGames()
 
     public function openGames()
     {
-        $games = $this->GameRepository;
+        $games = $this->gameRepository;
 
         // Pour chaque partie
         foreach ($games as $value) 
@@ -38,50 +46,61 @@ class GameRepositoryTest extends WebTestCase
         // Sinon tout est OK !
         return true;
     }
-
-    public function testOpenGames2()
+    public function testOpenGames()
     {   
-        $result = $this->openGames();
-        
-        // Vérifie si aucun joueur 2 ne possède de mot de passe
-        $this->assertTrue($result);
-    }
-/*
-    public function testGetTags()
-    {
-        $tags = $this->AppRepository->getTags();
-
-        $this->assertTrue(count($tags) > 1);
-        $this->assertContains('symblog', $tags);
+        $this->assertTrue($this->openGames());
     }
 
-    public function testGetTagWeights()
+
+    // TEST findOpenPublicGames()
+
+    public function openPublicGames()
     {
-        $tagsWeight = $this->AppRepository->getTagWeights(
-            array('php', 'code', 'code', 'symblog', 'blog')
-        );
+        $games = $this->gamePublicRepo;
+        foreach ($games as $value2)
+        {   // Si le joueur 2 possède un secret ou que la partie a un mot de passe, on return FALSE
+            if(($value2->getP2Secret() !== null) OR ($value2->getPassword() !== null)){
+                return false;
+            }
+        }
+        return true;
+    }
+    public function testOpenPublicGames()
+    {
+        $this->assertTrue($this->openPublicGames());
+    }
 
-        $this->assertTrue(count($tagsWeight) > 1);
 
-        // Test case where count is over max weight of 5
-        $tagsWeight = $this->AppRepository->getTagWeights(
-            array_fill(0, 10, 'php')
-        );
+    // TEST findGamesByNameFuzzy()
 
-        $this->assertTrue(count($tagsWeight) >= 1);
+    public function searchGameByName()
+    {
+        $game = $this->gamesByName;
+        // S'il trouve une partie avec p2secret égal à nul
+        if(($game[0]->getName() === 'Recusandae asperiores accusamus nihil.') AND ($game[0]->getP2Secret() === null)){
+            return true;
+        }
+        return false;
+    }
+    public function testGameByName()
+    {
+        $this->assertTrue($this->searchGameByName());
+    }    
 
-        // Test case with multiple counts over max weight of 5
-        $tagsWeight = $this->AppRepository->getTagWeights(
-            array_merge(array_fill(0, 10, 'php'), array_fill(0, 2, 'html'), array_fill(0, 6, 'js'))
-        );
 
-        $this->assertEquals(5, $tagsWeight['php']);
-        $this->assertEquals(3, $tagsWeight['js']);
-        $this->assertEquals(1, $tagsWeight['html']);
+    // TEST findOpenPublicGamesByNameFuzzy()
 
-        // Test empty case
-        $tagsWeight = $this->AppRepository->getTagWeights(array());
-
-        $this->assertEmpty($tagsWeight);
-    }*/
+    public function openPublicGamesByName()
+    {
+        $game = $this->gamesByName;
+        // S'il trouve une partie avec p2secret égal à nul et sans mot de passe
+        if(($game[0]->getName() === 'Recusandae asperiores accusamus nihil.') AND ($game[0]->getP2Secret() === null) AND ($game[0]->getPassword() === null)){
+            return true;
+        }
+        return false;
+    }
+    public function testOpenPublicGamesByName()
+    {
+        $this->assertTrue($this->openPublicGamesByName());
+    }
 }
