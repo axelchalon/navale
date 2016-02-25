@@ -75,7 +75,6 @@ fos_rest:
         default_format: json
     view:
         view_response_listener: force
-        exception_wrapper_handler: AppBundle\Handler\ExceptionWrapperHandler
     exception:
         enabled: true
         messages:

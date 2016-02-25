@@ -110,17 +110,17 @@ class ApiController extends FOSRestController
     public function joinGameAction(Game $game, ParamFetcher $paramFetcher)
     {
         if ($game->getPassword() !== $paramFetcher->get('password'))
-            return $this->view(array('error' => 'Bad password.'),403);
+            throw new HttpException(400, 'Bad password.');
 
         if ($game->isFull())
-            return $this->view(array('error' => 'Game is already full.'),403);
+            throw new HttpException(400, 'Game is already full.');
 
         $game->generateP2Secret();
 
         $em = $this->getDoctrine()->getEntityManager();
         $em->persist($game);
         $em->flush();
-        
+
         return $this->view(array('secret' => $game->getP2Secret()))
                     ->setTemplate('AppBundle:Api:player_join.html.twig')
                     ->setTemplateData(array('game' => $game, 'secret' => $game->getP2Secret()));
@@ -189,13 +189,13 @@ class ApiController extends FOSRestController
         $player = $game->getPlayerBySecret($paramFetcher->get('secret'));
         // @TODO Exception in Game entity if bad secret?
         if ($player === null)
-            return $this->view(array('error' => 'Bad secret.'),403);
+            throw new HttpException(400, 'Bad secret.');
 
         if (!$game->isFull()) // @todo mettre ces vérifs dans l'entité
-            return $this->view(array('error' => 'No one has joined yet.'),403);
+            throw new HttpException(400, 'No one has joined yet.');
 
         if ($game->playerHasPlacedShips($player))
-            return $this->view(array('error' => 'You\'ve already placed your ships.'),403);
+            throw new HttpException(400, 'You\'ve already placed your ships.');
 
         if (!($res = $game->setPlayerShips($player,$paramFetcher->get('ships'))) instanceof Game) // can throw exception @TODO
             var_dump($res);
@@ -268,13 +268,13 @@ class ApiController extends FOSRestController
         $player = $game->getPlayerBySecret($paramFetcher->get('secret'));
 
         if ($player === null)
-            return $this->view(array('error' => 'Bad secret.'),403);
+            throw new HttpException(400, 'Bad secret.');
 
         if (!$game->isFull())
-            return $this->view(array('error' => 'The game isn\'t full yet.'),403);
+            throw new HttpException(400, 'The game isn\'t full yet.');
 
         if ($game->getNextPlayer() === null || (int)$game->getNextPlayer() !== (int)$player)
-            return $this->view(array('error' => 'It\'s not your turn to play.'),403);
+            throw new HttpException(400, 'It\'s not your turn to play.');
 
         $result = $game->playerShoots($player,['x' => $paramFetcher->get('x'), 'y' => $paramFetcher->get('y')]); // can throw exception @TODO
         if (is_int($result))

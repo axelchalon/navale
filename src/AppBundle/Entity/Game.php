@@ -11,6 +11,7 @@ use JMS\Serializer\Annotation\SerializedName;
 use JMS\Serializer\Annotation\Expose;
 use JMS\Serializer\Annotation\ExclusionPolicy;
 
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
  * Game
@@ -219,18 +220,18 @@ class Game
         foreach ($ships as $ship)
         {
             if (!isset($ship['size']))
-                return 1; // @TODO throw exception
+                throw new HttpException(400, "Undefined size.");
 
             if(($key = array_search((int)$ship['size'], $shipsPresets)) === false)
-                return 2; // @TODO throw exception
+                throw new HttpException(400, "Illegal size.");
 
             if(sizeof(array_keys($ship)) !== 4) // x, y, size, direction
-                return 3; // @TODO throw exception
+                throw new HttpException(400, "Illegal amount of ships.");
 
             unset($shipsPresets[$key]);
 
             if (!isset($ship['direction']) || (!in_array($ship['direction'],array('horizontal', 'vertical'))))
-                return 4; // @TODO throw exception
+                throw new HttpException(400, "Undefined or illegal direction.");
 
             if ($ship['direction'] == 'horizontal')
             {
@@ -249,12 +250,12 @@ class Game
                 $x+=$xp, $y+=$yp, $remainingSize--)
             {
                 if ($x < 0 || $y < 0 || $x > 9 || $y > 9)
-                    return 5; // @TODO throw exception
+                    throw new HttpException(400, "Ships go out of bounds.");
 
                 $newPosition = ['x' => $x, 'y' => $y];
 
-                if (in_array($newPosition,$occupiedPositions)) // feature idea @todo : dire quels navires s'intersectent
-                    return 6; // @TODO throw exception (intersection)
+                if (in_array($newPosition,$occupiedPositions))
+                    throw new HttpException(400, "Ships intersect");
 
                 $occupiedPositions[] = $newPosition;
             }
@@ -317,21 +318,21 @@ class Game
             $shotsReceived = $this->getP1ShotsReceived();
         }
         else
-            return 1; // @TODO throw exception
+            throw new HttpException(400, "Undefined player.");
 
         foreach ($shotsReceived as &$_shotReceived)
             $_shotReceived = array_intersect_key($_shotReceived, array_flip(['x', 'y']));// on enlève la clé "result"
 
         if (!ctype_digit((string)$shotCoord['x']) || (int)$shotCoord['x'] < 0 || (int)$shotCoord['x'] > 9)
-            return 2; // @TODO throw exception
+            throw new HttpException(400, "Coordinates out of bounds.");
 
         if (!ctype_digit((string)$shotCoord['y']) || (int)$shotCoord['y'] < 0 || (int)$shotCoord['y'] > 9)
-            return 3; // @TODO throw exception
+            throw new HttpException(400, "Coordinates out of bounds.");
 
         foreach ($shotsReceived as $shotReceived)
         {
             if ($shotReceived['x'] == $shotCoord['x'] && $shotReceived['y'] == $shotCoord['y']) {
-                return 4; // @TODO throw error already played
+                throw new HttpException(400, "Shot already played at this position.");
             }
         }
 
