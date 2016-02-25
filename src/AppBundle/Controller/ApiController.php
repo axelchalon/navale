@@ -22,16 +22,7 @@ use AppBundle\Entity\Game;
  * @Route("/")
  */
 class ApiController extends FOSRestController
-{
-    /**
-     * @Route("/", name="api_homepage")
-     */
-    public function indexAction(Request $request)
-    {
-        return new Response(); // @TODO List available endpoints or link to API doc.
-    }
-
-    /**
+{    /**
      * ===========
      * PARTIES
      * ===========
@@ -44,7 +35,7 @@ class ApiController extends FOSRestController
      * )
      * @QueryParam(name="type", requirements="public", nullable=true, description="Filtrer les parties par type.")
      * @QueryParam(name="name", requirements=".+", nullable=true, description="Filtrer les parties par nom.")
-     * @Get("/games", name="list_games")
+     * @Get("/", name="list_games")
      * @Get("/api/v1/games", name="list_games_api")
      */
     public function listGamesAction(ParamFetcher $paramFetcher)

@@ -17,3 +17,5 @@
  * Vous pouvez lancer les tests unitaires : `phpunit`
  * Vous pouvez visiter l'interface sur votre navigateur
 
+## Documentation de l'API
+http://127.0.0.1:8000/documentation

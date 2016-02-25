@@ -6,6 +6,8 @@ php:
 
 before_script:
   - composer install --dev
-
+  - php bin/console doctrine:database:create
+  - php bin/console doctrine:schema:update --force
+  - php bin/console hautelook_alice:doctrine:fixtures:load --purge-with-truncate --no-interaction
 script:
   - phpunit

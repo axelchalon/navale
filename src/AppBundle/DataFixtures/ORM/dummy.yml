@@ -1,6 +1,6 @@
 AppBundle\Entity\Game:
     game_1:
-        name: <sentence(3)>
+        name: Exemple de partie
         p1Secret: abcdxf1hi2kl6nopqrst
         password: ~
     game_{2..5}:
