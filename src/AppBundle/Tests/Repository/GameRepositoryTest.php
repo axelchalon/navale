@@ -12,6 +12,7 @@ class GameRepositoryTest extends WebTestCase
      * @var \AppBundle\Repository\GameRepository
      */
     private $GameRepository;
+    private $GamePublicRepo;
 
     public function setUp()
     {  
@@ -21,8 +22,12 @@ class GameRepositoryTest extends WebTestCase
         $this->GameRepository = $kernel->getContainer()
                                        ->get('doctrine.orm.entity_manager')
                                        ->getRepository('AppBundle:Game')->findOpenGames();
+        $this->GamePublicRepo = $kernel->getContainer()
+                                        ->get('doctrine.orm.entity_manager')
+                                        ->getRepository('AppBundle:Game')->findOpenPublicGames();
     }
 
+    // Test findOpenGames()
     public function openGames()
     {
         $games = $this->GameRepository;
@@ -44,6 +49,28 @@ class GameRepositoryTest extends WebTestCase
         $result = $this->openGames();
         
         // Vérifie si aucun joueur 2 ne possède de mot de passe
+        $this->assertTrue($result);
+    }
+
+    // Test findOpenPublicGames()
+    public function openPublicGames()
+    {
+        $games = $this->GamePublicRepo;
+
+        foreach ($games as $value2)
+        {
+            if(($value2->getP2Secret() !== null) OR ($value2->getPassword() !== null))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public function testOpenPublicGames()
+    {
+        $result = $this->openPublicGames();
+
         $this->assertTrue($result);
     }
 /*
