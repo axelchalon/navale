@@ -10,6 +10,7 @@
 
 <h4>Cliquez pour vérifier si le 2e joueur a placé ses navires</h4>
 <form action="{{ path('playerX_placed_ships', {'game_id': game.id, 'player_id': opponent_player_id }) }}" method="get">
-	<button type="submit" class="btn btn-default">Vérifier</button>
+    <input type="hidden" name="secret" value="{{ secret }}">
+    <button type="submit" class="btn btn-default">Vérifier</button>
 </form>	
 {% endblock %}

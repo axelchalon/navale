@@ -395,6 +395,29 @@ class Game
     {
         return $this->nextPlayer === null && $this->p2Secret !== null;
     }
+
+
+    /**
+     * Get a move
+     * @return Game
+     */
+    public function getNextMoveId()
+    {
+        if ($this->p2ShotsReceived !== null)
+            $a = $this->p2ShotsReceived;
+        else
+            $a = [];
+
+
+        if ($this->p1ShotsReceived !== null)
+            $b = $this->p1ShotsReceived;
+        else
+            $b = [];
+
+        $shots = array_merge($a,$b);
+        return sizeof($shots)+1;
+    }
+
     /**
      * Get a move
      * @return Game
@@ -403,7 +426,7 @@ class Game
     {
         $shots = array_merge($this->p2ShotsReceived,$this->p1ShotsReceived);
         if (!isset($shots[(int)$shot-1]))
-            throw new HttpException(400, "Move doesn't exist.");
+            return false; // throw new HttpException(400, "Move doesn't exist.");
 
         return $shots[(int)$shot-1];
     }

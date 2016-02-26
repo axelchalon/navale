@@ -17,8 +17,9 @@ h1{
 	margin: 10px;
 }
 .nom{
-	display: inline-block; width: 400px;
+	display: inline-block; width: 230px;
 }
+input[type=password] { display: inline-block; }
 form{
 	display: inline-block;
 }

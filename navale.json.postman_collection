@@ -9,6 +9,7 @@
 		"ca8bbc18-df9f-75ac-be3b-6887bf8a7d40",
 		"7a6ed05f-561c-66f2-487a-258cbe18cbdb",
 		"fb2e6fb0-0851-ceba-556c-1547e939acc2",
+		"40c97bd9-6d75-e858-ccba-93d8ba50770c",
 		"fea983b1-421d-037f-3b27-75b8d556d4ed",
 		"b559c1e2-d5ce-dbd6-c32a-0bb9bac6d9e9",
 		"b38ce36d-5504-63e0-01a3-7bed1180c718",
@@ -74,6 +75,33 @@
 			"description": "",
 			"descriptionFormat": "html",
 			"time": 1456435360875,
+			"version": 2,
+			"responses": [],
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {}
+		},
+		{
+			"id": "40c97bd9-6d75-e858-ccba-93d8ba50770c",
+			"headers": "",
+			"url": "127.0.0.1:8000/api/v1/games/11/players/2",
+			"pathVariables": {},
+			"preRequestScript": "",
+			"method": "GET",
+			"collectionId": "3048ecaf-6c16-38f1-db4a-3711f470a014",
+			"data": [
+				{
+					"key": "name",
+					"value": "Ici le nom de ma partie !",
+					"type": "text",
+					"enabled": true
+				}
+			],
+			"dataMode": "params",
+			"name": "Vérifier si un adversaire a rejoint",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1456477457294,
 			"version": 2,
 			"responses": [],
 			"tests": "",
@@ -508,21 +536,147 @@
 			"id": "e0f9a3c1-6332-3889-2a8c-148836f250d9",
 			"headers": "",
 			"url": "127.0.0.1:8000/api/v1/games",
-			"pathVariables": {},
 			"preRequestScript": "",
+			"pathVariables": {},
 			"method": "GET",
-			"collectionId": "3048ecaf-6c16-38f1-db4a-3711f470a014",
-			"data": [],
+			"data": [
+				{
+					"key": "secret",
+					"value": "abcdxf1hi2kl6nopqrst",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "ships[0][size]",
+					"value": "5",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "ships[0][direction]",
+					"value": "horizontal",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "ships[0][x]",
+					"value": "0",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "ships[0][y]",
+					"value": "0",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "ships[1][size]",
+					"value": "4",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "ships[1][direction]",
+					"value": "horizontal",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "ships[1][x]",
+					"value": "0",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "ships[1][y]",
+					"value": "1",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "ships[2][size]",
+					"value": "3",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "ships[2][direction]",
+					"value": "horizontal",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "ships[2][x]",
+					"value": "0",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "ships[2][y]",
+					"value": "2",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "ships[3][size]",
+					"value": "3",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "ships[3][direction]",
+					"value": "horizontal",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "ships[3][x]",
+					"value": "0",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "ships[3][y]",
+					"value": "3",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "ships[4][size]",
+					"value": "2",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "ships[4][x]",
+					"value": "0",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "ships[4][y]",
+					"value": "4",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "ships[4][direction]",
+					"value": "horizontal",
+					"type": "text",
+					"enabled": true
+				}
+			],
 			"dataMode": "params",
-			"name": "Récupérer toutes les parties en attente",
-			"description": "",
-			"descriptionFormat": "html",
-			"time": 1456435340666,
 			"version": 2,
-			"responses": [],
 			"tests": "",
 			"currentHelper": "normal",
-			"helperAttributes": {}
+			"helperAttributes": {},
+			"time": 1456477361428,
+			"name": "Récupérer toutes les parties en attente",
+			"description": "",
+			"collectionId": "3048ecaf-6c16-38f1-db4a-3711f470a014",
+			"responses": []
 		},
 		{
 			"id": "fb2e6fb0-0851-ceba-556c-1547e939acc2",

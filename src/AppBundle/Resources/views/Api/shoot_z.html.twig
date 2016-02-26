@@ -1,18 +1,18 @@
 {% extends 'AppBundle:template.html.twig' %}
 
 {% block title %}
- Attente joueur
+ Attente du tir adverse
 {% endblock %}
 
 {% block body %}
 
-<h1>Partie </h1>
+<h1>Attente du tir de l'adversaire</h1>
 <h2></h2>
-<h4>Cliquez pour vérifier si quelqu'un a rejoint la partie</h4>
-<form action="{{ path('player2_joined', {'game_id': game.id}) }}" method="get">
+<h4>Cliquez pour vérifier si l'adversaire a joué.</h4>
+<form action="{{ path('retrieve_shot', {'move_id': move_id, 'game_id': game.id}) }}" method="get">
 
     <input type="hidden" name="secret" value="{{ secret }}">
 	<button type="submit" value="Créer une partie" class="btn btn-default">Vérifier</button>
 </form>	
- Pas de nouveau joueur
+ Pas de nouveau tir
 {% endblock %}

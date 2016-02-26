@@ -53,7 +53,7 @@ class ApiController extends FOSRestController
 
         return $this->view($games)
                     ->setTemplate("AppBundle:Api:list_games.html.twig")
-                    ->setTemplateData(array('games' => $games));
+                    ->setTemplateData(array('games' => json_decode($this->container->get('jms_serializer')->serialize($games,'json'))));
     }
 
     /**
@@ -136,19 +136,21 @@ class ApiController extends FOSRestController
      *      }
      * )
      * @ParamConverter("game", class="AppBundle:Game", options={"id" = "game_id"})
+     * @QueryParam(name="secret", nullable=true, description="Secret du joueur")
      * @Get("/games/{game_id}/players/2", name="player2_joined")
      * @Get("/api/v1/games/{game_id}/players/2", name="player2_joined_api")
      */
-    public function player2JoinedAction(Game $game)
+    public function player2JoinedAction(Game $game, ParamFetcher $paramFetcher)
     {
         if (!$game->isFull()){
-
             return $this->view(array('error' => 'No one has joined yet.'),404)
-                        ->setTemplate('AppBundle:Api:join.html.twig');
+                        ->setTemplate('AppBundle:Api:no_player_join.html.twig')
+                        ->setTemplateData(array('game' => $game, 'secret' => $paramFetcher->get('secret')));
         }
 
         return $this->view(array('info' => 'Somebody joined!'),200)
-                        ->setTemplate('AppBundle:Api:no_player_join.html.twig');
+                        ->setTemplate('AppBundle:Api:player_join.html.twig')
+                        ->setTemplateData(array('game' => $game, 'secret' => $paramFetcher->get('secret')));
     }
 
     /**
@@ -199,7 +201,7 @@ class ApiController extends FOSRestController
 
         return $this->view(array('info' => 'Ships placed!'),200)
                     ->setTemplate('AppBundle:Api:verify_placed_ships.html.twig')
-                    ->setTemplateData(array('game' => $game, 'opponent_player_id' => $player == 1 ? 2 : 1));
+                    ->setTemplateData(array('secret' => $paramFetcher->get('secret'), 'game' => $game, 'opponent_player_id' => $player == 1 ? 2 : 1));
     }
 
     /**
@@ -214,19 +216,27 @@ class ApiController extends FOSRestController
      *      }
      * )
      * @ParamConverter("game", class="AppBundle:Game", options={"id" = "game_id"})
+     * @QueryParam(name="secret", nullable=true, description="Secret du joueur")
      * @Get("/api/v1/games/{game_id}/players/{player_id}/ships", name="playerX_placed_ships_api")
      * @Get("/games/{game_id}/players/{player_id}/ships", name="playerX_placed_ships")
      */
-    public function shipsPlacedAction(Game $game, $player_id)
+    public function shipsPlacedAction(Game $game, $player_id, ParamFetcher $paramFetcher)
     {
         if (!$game->playerHasPlacedShips($player_id))
         {
             return $this->view(array('error' => 'The player\'s ships haven\'t been placed yet.'),404)
                     ->setTemplate('AppBundle:Api:verify_placed_ships.html.twig')
-                    ->setTemplateData(array('game' => $game, 'opponent_player_id' => $player_id));
+                    ->setTemplateData(array('game' => $game, 'opponent_player_id' => $player_id, 'secret' => $paramFetcher->get('secret')));
         }
 
-        return $this->view(array('info' => 'The player\'s ships have been placed.'),200);
+        if ($player_id == 2)
+            return $this->view(array('info' => 'The player\'s ships have been placed.'),200)
+            ->setTemplate('AppBundle:Api:shoot.html.twig')
+            ->setTemplateData(array('game' => $game, 'secret' => $paramFetcher->get('secret')));
+        else
+            return $this->view(array('info' => 'The player\'s ships have been placed.'),200)
+                ->setTemplate('AppBundle:Api:shoot_z.html.twig')
+                ->setTemplateData(array('game' => $game, 'move_id' => 1, 'secret' => $paramFetcher->get('secret')));
     }
 
     /**
@@ -280,7 +290,10 @@ class ApiController extends FOSRestController
         $em->persist($game);
         $em->flush();
 
-        return $this->view(array('result' => $result),200);
+        return $this->view(array('result' => $result),200)
+                 ->setTemplate('AppBundle:Api:shoot_result.html.twig')
+                 ->setTemplateData(array('move' => ['x' => $paramFetcher->get('x'), 'y' => $paramFetcher->get('y'), 'result' => $result], 'move_id' => $game->getNextMoveId(), 'game' => $game, 'secret' => $paramFetcher->get('secret')));
+
     }
 
     /**
@@ -296,12 +309,23 @@ class ApiController extends FOSRestController
      *      }
      * )
      * @ParamConverter("game", class="AppBundle:Game", options={"id" = "game_id"})
+     * @QueryParam(name="secret", nullable=true, description="Secret du joueur")
      * @Get("/api/v1/games/{game_id}/moves/{move_id}", name="retrieve_shot_api") ou /moves?
      * @Get("/games/{game_id}/moves/{move_id}", name="retrieve_shot") ou /moves?
      */
     public function retrieveShotAction(Game $game, $move_id, ParamFetcher $paramFetcher)
     {
         $move = $game->retrieveShot($move_id);
-        return $this->view(array('move' => $move),200);
+
+        if ($move === false)
+        {
+            return $this->view(array('info' => 'Move doesn\'t exist.'),404)
+                ->setTemplate('AppBundle:Api:shoot_z.html.twig')
+                ->setTemplateData(array('move_id' => $move_id, 'game' => $game, 'secret' => $paramFetcher->get('secret')));
+        }
+
+        return $this->view(array('move' => $move),200)
+            ->setTemplate('AppBundle:Api:shoot_move.html.twig')
+            ->setTemplateData(array('move' => $move, 'game' => $game, 'secret' => $paramFetcher->get('secret')));
     }
 }

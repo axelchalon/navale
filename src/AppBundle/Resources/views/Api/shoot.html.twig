@@ -1,0 +1,29 @@
+{% extends 'AppBundle:template.html.twig' %}
+
+{% block title %}
+ Placer les navires
+{% endblock %}
+
+{% block body %}
+
+<h1>Placer les navires : </h1>
+
+<form action="{{ path('shoot', {'game_id': game.id }) }}" method="post" class="placeShip">
+
+	<input type="hidden" name="secret" value="{{ secret }}">
+
+	<span>x: <input type="text" name="x" class="form-control" value="0"></span>
+	<span>y: <input type="text" name="y" class="form-control" value="0"></span>
+
+	<button type="submit" class="btn btn-success confirm">Tirer</button>
+</form>	
+<!-- jouer un coup :
+<input type="hidden" name="secret" value="">
+<input type="text" name="x">
+<input type="text" name="y"> -->
+{% endblock %}
+
+
+
+
+

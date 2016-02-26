@@ -1,0 +1,22 @@
+{% extends 'AppBundle:template.html.twig' %}
+
+{% block title %}
+ Attente du tir adverse
+{% endblock %}
+
+{% block body %}
+
+<h1>Résultat du tir en {{ move.x }}, {{ move.y }} : {{ move.result }} !</h1>
+
+{% if move.result != 'win' %}
+    <h2></h2>
+    <h4>Cliquez pour vérifier si l'adversaire a joué.</h4>
+    <form action="{{ path('retrieve_shot', {'move_id': move_id, 'game_id': game.id}) }}" method="get">
+
+    <input type="hidden" name="secret" value="{{ secret }}">
+    <button type="submit" value="Créer une partie" class="btn btn-default">Vérifier</button>
+    </form>
+    Pas de nouveau tir
+{% endif %}
+
+{% endblock %}
